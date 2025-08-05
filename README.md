@@ -92,4 +92,7 @@ La API expone los siguientes endpoints:
 
 - `GET /v1/reports?clientId={id}&startDate=YYYY-MM-DD&endDate=YYYY-MM-DD` → Generar reporte de transacciones
 
+## 📌 Recursos adicionales
 
+- **Script de base de datos:** `/src/database`
+- **Colección de Postman:** `/src/postman`
