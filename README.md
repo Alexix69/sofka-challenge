@@ -2,7 +2,7 @@
 
 ## 📌 Descripción del Proyecto
 
-Este es un servicio backend desarrollado en **Spring Boot** que gestiona clientes, cuentas y transacciones bancarias. La aplicación sigue principios de **arquitectura hexagonal** y usa **PostgreSQL** como base de datos.
+Este es un servicio backend desarrollado en **Spring Boot** que gestiona clientes, cuentas y transacciones bancarias. La aplicación sigue buenas prácticas de programación, principios **SOLID** y usa **PostgreSQL** como base de datos.
 
 ## 🚀 Tecnologías Utilizadas
 
