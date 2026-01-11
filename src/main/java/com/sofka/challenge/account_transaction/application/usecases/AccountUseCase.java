@@ -51,7 +51,7 @@ public class AccountUseCase {
         ClientEntity client = clientRepository.findById(accountDTO.getClientId())
                 .orElseThrow();
 
-        if (accountRepository.existsByClientIdAndAccountNumber(accountDTO.getClientId(), accountDTO.getAccountNumber())) {
+        if (accountRepository.existsByAccountNumber(accountDTO.getAccountNumber())) {
             throw new UniqueConstraintViolationException("accountNumber", accountDTO.getAccountNumber());
         }
 
@@ -68,12 +68,12 @@ public class AccountUseCase {
         ClientEntity client = clientRepository.findById(accountDTO.getClientId())
                 .orElseThrow();
 
-        boolean exists = accountRepository.findByClientId(client.getId()).stream()
-                .anyMatch(acc -> !acc.getId().equals(id) && acc.getAccountNumber().equals(accountDTO.getAccountNumber()));
+        accountRepository.findByAccountNumber(accountDTO.getAccountNumber()).ifPresent(existing -> {
+            if (!existing.getId().equals(id)) {
+                throw new UniqueConstraintViolationException("accountNumber", accountDTO.getAccountNumber());
+            }
+        });
 
-        if (exists) {
-            throw new UniqueConstraintViolationException("accountNumber", accountDTO.getAccountNumber());
-        }
 
         accountMapper.updateAccountFromDto(accountDTO, account);
         account.setClient(client);
