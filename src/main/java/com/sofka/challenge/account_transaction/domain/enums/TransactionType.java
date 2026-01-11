@@ -12,6 +12,12 @@ public enum TransactionType {
         public boolean isValidAmount(double amount) {
             return amount < 0;
         }
+    },
+    TRANSFER {
+        @Override
+        public boolean isValidAmount(double amount) {
+            return amount != 0;
+        }
     };
 
     public abstract boolean isValidAmount(double amount);

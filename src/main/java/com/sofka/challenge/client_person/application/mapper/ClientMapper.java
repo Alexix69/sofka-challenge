@@ -14,6 +14,7 @@ public interface ClientMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "person", ignore = true)
+    @Mapping(target = "passwordHash", source = "password")
     ClientEntity toEntity(ClientDTO clientDTO);
 
     @Mapping(target = "name", source = "person.name")
@@ -26,5 +27,6 @@ public interface ClientMapper {
     ClientDTO toDTO(ClientEntity client);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "passwordHash", source = "password")
     void updateClientFromDto(ClientDTO clientDTO, @MappingTarget ClientEntity client);
 }

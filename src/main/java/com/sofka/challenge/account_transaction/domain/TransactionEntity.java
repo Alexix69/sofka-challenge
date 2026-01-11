@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "transaction")
+@Table(name = "account_transaction")
 public class TransactionEntity {
 
     @Id
@@ -25,7 +25,7 @@ public class TransactionEntity {
     private LocalDateTime transactionDate = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(name = "transaction_type", nullable = false, length = 50)
     private TransactionType transactionType;
 
     @Column(nullable = false)

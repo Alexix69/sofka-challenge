@@ -1,5 +1,6 @@
 package com.sofka.challenge.client_person.domain;
 
+import com.sofka.challenge.client_person.domain.enums.GenderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,8 +22,9 @@ public class PersonEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private String gender;
+    private GenderType gender;
 
     private Integer age;
 

@@ -1,6 +1,7 @@
 package com.sofka.challenge.client_person.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sofka.challenge.client_person.domain.enums.GenderType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -17,7 +18,7 @@ public class ClientDTO {
     @NotBlank
     private String name;
 
-    private String gender;
+    private GenderType gender;
     private Integer age;
 
     @NotBlank

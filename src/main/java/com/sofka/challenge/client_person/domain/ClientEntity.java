@@ -20,8 +20,8 @@ public class ClientEntity {
     @JoinColumn(name = "person_id", nullable = false, unique = true)
     private PersonEntity person;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
     @Column(nullable = false)
     private Boolean status;

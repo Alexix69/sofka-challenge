@@ -49,7 +49,11 @@ public class ClientUseCase {
         PersonEntity person = personMapper.toEntity(clientDTO);
         person = personRepository.save(person);
 
-        ClientEntity client = ClientEntity.builder().person(person).password(clientDTO.getPassword()).status(clientDTO.getStatus()).build();
+        ClientEntity client = ClientEntity.builder()
+                .person(person)
+                .passwordHash(clientDTO.getPassword())
+                .status(clientDTO.getStatus())
+                .build();
         return clientMapper.toDTO(clientRepository.save(client));
     }
 
