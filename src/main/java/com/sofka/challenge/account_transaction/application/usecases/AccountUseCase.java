@@ -94,7 +94,8 @@ public class AccountUseCase {
             throw new BadRequestException("Cannot delete account with transaction history");
         }
 
-        accountRepository.delete(account);
+        account.setStatus(false);
+        accountRepository.save(account);
     }
 
 }

@@ -109,7 +109,11 @@ public class ClientUseCase {
             throw new BadRequestException("Cannot delete client with transaction history");
         }
 
-        accountRepository.deleteAll(accounts);
-        clientRepository.delete(client);
+        accounts.forEach(account -> {
+            account.setStatus(false);
+            accountRepository.save(account);
+        });
+        client.setStatus(false);
+        clientRepository.save(client);
     }
 }
