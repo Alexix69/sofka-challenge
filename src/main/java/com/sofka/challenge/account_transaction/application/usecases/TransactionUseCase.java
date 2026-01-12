@@ -9,7 +9,7 @@ import com.sofka.challenge.account_transaction.infrastructure.persistence.Accoun
 import com.sofka.challenge.account_transaction.infrastructure.persistence.TransactionRepository;
 import com.sofka.challenge.common.exceptions.BadRequestException;
 import com.sofka.challenge.common.exceptions.InsufficientBalanceException;
-import jakarta.persistence.EntityNotFoundException;
+import com.sofka.challenge.common.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,13 +33,13 @@ public class TransactionUseCase {
 
     public TransactionDTO getTransactionById(Long id) {
         TransactionEntity transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Transaction with id " + id + " not found"));
+                .orElseThrow(() -> NotFoundException.of(TransactionEntity.class, id));
         return transactionMapper.toDTO(transaction);
     }
 
     public List<TransactionDTO> getTransactionsByAccountId(Long accountId) {
         accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("Account with id " + accountId + " doesn't exist"));
+                .orElseThrow(() -> NotFoundException.of(AccountEntity.class, accountId));
 
         return transactionRepository.findByAccountId(accountId).stream()
                 .map(transactionMapper::toDTO)
@@ -50,7 +50,7 @@ public class TransactionUseCase {
     @Transactional
     public TransactionDTO createTransaction(TransactionDTO transactionDTO) {
         AccountEntity account = accountRepository.findById(transactionDTO.getAccountId())
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> NotFoundException.of(AccountEntity.class, transactionDTO.getAccountId()));
 
         if (!transactionDTO.getTransactionType().isValidAmount(transactionDTO.getAmount())) {
             throw new BadRequestException("Invalid transaction amount for type: " + transactionDTO.getTransactionType());

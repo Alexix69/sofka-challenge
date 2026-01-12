@@ -2,6 +2,8 @@ package com.sofka.challenge.client_person.domain;
 
 import com.sofka.challenge.client_person.domain.enums.GenderType;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +25,8 @@ public class PersonEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(length = 10, columnDefinition = "gender_type")
     private GenderType gender;
 
     private Integer age;

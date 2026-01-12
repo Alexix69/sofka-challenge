@@ -8,8 +8,8 @@ import com.sofka.challenge.account_transaction.infrastructure.persistence.Transa
 import com.sofka.challenge.client_person.domain.ClientEntity;
 import com.sofka.challenge.client_person.infrastructure.persistence.ClientRepository;
 import com.sofka.challenge.common.exceptions.BadRequestException;
+import com.sofka.challenge.common.exceptions.NotFoundException;
 import com.sofka.challenge.common.exceptions.UniqueConstraintViolationException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +39,7 @@ public class AccountUseCase {
 
     public List<AccountDTO> getAccountsByClientId(Long clientId) {
         if (!clientRepository.existsById(clientId)) {
-            throw new EntityNotFoundException("Client with id " + clientId + " doesn't exists");
+            throw NotFoundException.of("Client", clientId);
         }
         return accountRepository.findByClientId(clientId).stream()
                 .map(accountMapper::toDTO)
@@ -49,7 +49,7 @@ public class AccountUseCase {
     @Transactional
     public AccountDTO createAccount(AccountDTO accountDTO) {
         ClientEntity client = clientRepository.findById(accountDTO.getClientId())
-                .orElseThrow();
+                .orElseThrow(() -> NotFoundException.of(ClientEntity.class, accountDTO.getClientId()));
 
         if (accountRepository.existsByAccountNumber(accountDTO.getAccountNumber())) {
             throw new UniqueConstraintViolationException("accountNumber", accountDTO.getAccountNumber());
@@ -63,10 +63,14 @@ public class AccountUseCase {
     @Transactional
     public AccountDTO updateAccount(Long id, AccountDTO accountDTO) {
         AccountEntity account = accountRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> NotFoundException.of(AccountEntity.class, id));
 
         ClientEntity client = clientRepository.findById(accountDTO.getClientId())
-                .orElseThrow();
+                .orElseThrow(() -> NotFoundException.of(ClientEntity.class, accountDTO.getClientId()));
+
+        if (!account.getClient().getId().equals(client.getId())) {
+            throw new BadRequestException("Account cannot be transferred to another client");
+        }
 
         accountRepository.findByAccountNumber(accountDTO.getAccountNumber()).ifPresent(existing -> {
             if (!existing.getId().equals(id)) {
@@ -83,7 +87,7 @@ public class AccountUseCase {
     @Transactional
     public void deleteAccount(Long id) {
         AccountEntity account = accountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> NotFoundException.of(AccountEntity.class, id));
 
         boolean hasTransactions = !transactionRepository.findByAccountId(account.getId()).isEmpty();
         if (hasTransactions) {

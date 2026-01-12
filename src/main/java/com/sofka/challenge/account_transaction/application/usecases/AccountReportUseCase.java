@@ -10,7 +10,7 @@ import com.sofka.challenge.account_transaction.infrastructure.persistence.Transa
 import com.sofka.challenge.client_person.domain.ClientEntity;
 import com.sofka.challenge.client_person.infrastructure.persistence.ClientRepository;
 import com.sofka.challenge.common.exceptions.BadRequestException;
-import jakarta.persistence.EntityNotFoundException;
+import com.sofka.challenge.common.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class AccountReportUseCase {
     @Transactional(readOnly = true)
     public AccountReportDTO generateAccountReport(Long clientId, LocalDate startDate, LocalDate endDate) {
         ClientEntity client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+                .orElseThrow(() -> NotFoundException.of(ClientEntity.class, clientId));
 
         if (startDate.isAfter(endDate)) {
             throw new BadRequestException("Start date cannot be after end date");

@@ -2,6 +2,8 @@ package com.sofka.challenge.client_person.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Builder
 @Getter
@@ -10,6 +12,8 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "client")
+@SQLDelete(sql = "UPDATE client SET status = false WHERE id = ?")
+@Where(clause = "status = true")
 public class ClientEntity {
 
     @Id

@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import java.time.LocalDateTime;
 
 @Getter
@@ -25,7 +26,8 @@ public class TransactionEntity {
     private LocalDateTime transactionDate = LocalDateTime.now();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "transaction_type", nullable = false, length = 50)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(name = "transaction_type", nullable = false, length = 50, columnDefinition = "transaction_type_enum")
     private TransactionType transactionType;
 
     @Column(nullable = false)

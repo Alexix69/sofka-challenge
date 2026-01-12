@@ -2,9 +2,11 @@ package com.sofka.challenge.client_person.application.mapper;
 
 import com.sofka.challenge.client_person.application.dto.ClientDTO;
 import com.sofka.challenge.client_person.domain.ClientEntity;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring", uses = PersonMapper.class)
@@ -27,6 +29,7 @@ public interface ClientMapper {
     ClientDTO toDTO(ClientEntity client);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "passwordHash", source = "password")
+    @Mapping(target = "passwordHash", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateClientFromDto(ClientDTO clientDTO, @MappingTarget ClientEntity client);
 }

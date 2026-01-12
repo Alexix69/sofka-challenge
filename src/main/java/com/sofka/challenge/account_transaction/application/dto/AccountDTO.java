@@ -3,6 +3,7 @@ package com.sofka.challenge.account_transaction.application.dto;
 import com.sofka.challenge.account_transaction.domain.enums.AccountType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -13,6 +14,7 @@ import lombok.*;
 public class AccountDTO {
     private Long id;
     @NotBlank
+    @Size(max = 20)
     private String accountNumber;
     @NotNull
     private AccountType accountType;

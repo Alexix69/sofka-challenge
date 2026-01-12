@@ -7,6 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 
 @Getter
 @Setter
@@ -14,6 +18,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "account")
+@SQLDelete(sql = "UPDATE account SET status = false WHERE id = ?")
+@Where(clause = "status = true")
 public class AccountEntity {
 
     @Id
@@ -24,7 +30,8 @@ public class AccountEntity {
     private String accountNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
+    @Column(nullable = false, length = 20, columnDefinition = "account_type_enum")
     private AccountType accountType;
 
     @Column(name = "initial_balance", nullable = false)
